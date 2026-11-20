@@ -39,7 +39,7 @@ if [ "$MODE" = "zip" ]; then
     (cd "$SRC" && rm -f "$REPO_DIR/dist/$name.zip" && zip -qr "$REPO_DIR/dist/$name.zip" "$name")
     echo "Built dist/$name.zip"
   done
-  echo "Upload in claude.ai: Settings > Capabilities (code execution on) > Skills > Upload."
+  echo "Upload in Claude: turn on code execution, then Customize > Skills > upload the ZIP."
   exit 0
 fi
 
