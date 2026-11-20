@@ -44,7 +44,7 @@ Add content in this order (most exam value first). Rough heights at 10.2px base 
 
 Only add content that comes from the source material or is a correct worked example of it. Never pad with filler text, repeated content, or empty decoration.
 
-As a last resort for gaps < 6 mm, add class `stretch` to the last grid so it grows to the footer, or raise `--fs` by 0.2px for that page via `style="--fs:10.4px"` on the `<section>`.
+A gap under ~6 mm is fine — leave it. Do not use `.stretch` or empty spacing to reach the footer; the hole check flags it.
 
 ## Fill tactics — page UNEVEN
 
