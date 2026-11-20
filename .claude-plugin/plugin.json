@@ -1,7 +1,7 @@
 {
   "name": "study-skills",
-  "version": "1.0.0",
-  "description": "Five study skills for Claude: study-session, flashcard-writer, exam-quiz, study-guide, mind-map",
+  "version": "1.1.0",
+  "description": "Six study skills for Claude: study-session, flashcard-writer, exam-quiz, study-guide, mind-map, infographic-cheatsheet",
   "author": { "name": "Calvinkub" },
   "license": "MIT",
   "keywords": ["study", "flashcards", "quiz", "exam", "active-recall"]

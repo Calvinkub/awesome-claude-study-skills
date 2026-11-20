@@ -5,17 +5,17 @@
     "url": "https://github.com/Calvinkub"
   },
   "metadata": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Curated Claude Skills for studying: active-recall sessions, flashcards, exam quizzes, study guides, and mind maps"
   },
   "plugins": [
     {
       "name": "study-skills",
       "source": "./",
-      "description": "Five study skills: study-session, flashcard-writer, exam-quiz, study-guide, mind-map",
-      "version": "1.0.0",
+      "description": "Six study skills: study-session, flashcard-writer, exam-quiz, study-guide, mind-map, infographic-cheatsheet",
+      "version": "1.1.0",
       "category": "education",
-      "keywords": ["study", "flashcards", "anki", "quiz", "exam", "active-recall", "mind-map", "students"]
+      "keywords": ["study", "flashcards", "anki", "quiz", "exam", "active-recall", "mind-map", "cheat-sheet", "infographic", "students"]
     }
   ]
 }

@@ -5,12 +5,12 @@
 **A curated collection of Claude Skills for studying: active recall, flashcards, exam practice, study guides, and mind maps.**
 
 [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
-![Skill Count](https://img.shields.io/badge/skills-5-blue?style=classic)
+![Skill Count](https://img.shields.io/badge/skills-6-blue?style=classic)
 ![License](https://img.shields.io/badge/license-MIT-green?style=classic)
 
 </div>
 
-> 🇹🇭 **สรุปภาษาไทย:** รวม Claude Skill สำหรับอ่านหนังสือ/ติวสอบ 5 ตัว — `study-session` (อธิบาย → ให้อธิบายกลับ → ควิซ → ทำแฟลชการ์ด), `flashcard-writer`, `exam-quiz`, `study-guide`, `mind-map` ติดตั้งด้วย `./install-skills.sh` แล้วเรียกใน Claude Code ด้วย `/study-session` หรือแค่พิมพ์ว่า "ช่วยติว osmosis หน่อย" Claude จะโหลด skill ให้อัตโนมัติ
+> 🇹🇭 **สรุปภาษาไทย:** รวม Claude Skill สำหรับอ่านหนังสือ/ติวสอบ 6 ตัว — `study-session` (อธิบาย → ให้อธิบายกลับ → ควิซ → ทำแฟลชการ์ด), `flashcard-writer`, `exam-quiz`, `study-guide`, `mind-map` และ `infographic-cheatsheet` (สรุปสไลด์/PDF/TXT เยอะๆ เป็นโพย A4 แบบ infographic อธิบายละเอียด เต็มหน้ากระดาษ) ติดตั้งด้วย `./install-skills.sh` แล้วเรียกใน Claude Code ด้วย `/study-session` หรือแค่พิมพ์ว่า "ช่วยติว osmosis หน่อย" Claude จะโหลด skill ให้อัตโนมัติ
 
 A **Claude Skill** is a folder with a `SKILL.md` file. Claude reads the short `description` in each skill and loads the full routine only when your request matches. You write your study routine once, and Claude runs it the same way every time — no long prompt to retype.
 
@@ -35,6 +35,9 @@ Content is based on the article [Claude Skills for Studying: Build a Study Skill
 | [**exam-quiz**](skills/exam-quiz/SKILL.md) | ask to be tested before an exam | 10 mixed, timed questions, no feedback until the end, then a score table and your weakest areas |
 | [**study-guide**](skills/study-guide/SKILL.md) | ask for a study guide or summary sheet | One page: big picture, key-term table, core ideas, 3 worked examples, likely exam questions, common mistakes |
 | [**mind-map**](skills/mind-map/SKILL.md) | ask to map or connect a topic | Central idea, 4–6 branches, one example per branch, cross-links, plus a Mermaid `mindmap` block |
+| [**infographic-cheatsheet**](skills/infographic-cheatsheet/SKILL.md) | ask for a cheat sheet / summary from many slides, PDFs, or TXT files | Dense, colour-coded A4 infographic pages (analogy · core idea · worked example · trap), HTML + PDF. A Playwright script measures every page and loops until each is 92–99 % full with no empty bands |
+
+`infographic-cheatsheet` extra setup: `pip install playwright && playwright install chromium`, plus `pdftotext` (poppler) for PDF sources.
 
 **Rule of thumb:** one routine per skill. Small focused skills trigger more reliably than one giant skill.
 
