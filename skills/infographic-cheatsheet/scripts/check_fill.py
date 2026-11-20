@@ -6,6 +6,7 @@ for every <section class="page">, reports:
   fill%    = used height / usable height (header top to footer top)
   gap_mm   = empty space above the footer
   hole_mm  = largest empty vertical band anywhere on the page
+  col_mm   = largest column imbalance inside a multi-column grid row
   overflow = content cut off at the bottom (must be fixed)
 
 Usage:
@@ -65,6 +66,31 @@ MEASURE_JS = r"""
       reach = Math.max(reach, b);
     }
     hole = Math.max(hole, footTop - reach);
+    // column imbalance: in each multi-column grid row, how far the shortest
+    // column's ink ends above the tallest one (an empty half-column)
+    const inkBottom = el => {
+      let b = -Infinity;
+      if (inked(el)) b = el.getBoundingClientRect().bottom;
+      el.querySelectorAll('*').forEach(d => {
+        const r = d.getBoundingClientRect();
+        if (r.height > 0 && inked(d)) b = Math.max(b, r.bottom);
+      });
+      return b;
+    };
+    let colGap = 0;
+    p.querySelectorAll('*').forEach(g => {
+      const cs = getComputedStyle(g);
+      if (cs.display !== 'grid' || cs.gridTemplateColumns.split(' ').length < 2) return;
+      const rows = {};
+      [...g.children].forEach(c => {
+        const t = Math.round(c.getBoundingClientRect().top);
+        (rows[t] = rows[t] || []).push(inkBottom(c));
+      });
+      Object.values(rows).forEach(bs => {
+        const v = bs.filter(Number.isFinite);
+        if (v.length > 1) colGap = Math.max(colGap, Math.max(...v) - Math.min(...v));
+      });
+    });
     const usable = footTop - (pr.top + padTop);
     const fill = usable > 0 ? (used - (pr.top + padTop)) / usable : 0;
     const overflow = p.scrollHeight > p.clientHeight + 1 || used > footTop + 1;
@@ -75,7 +101,9 @@ MEASURE_JS = r"""
       fill: Math.round(fill * 1000) / 10,
       gap_mm: Math.round(((footTop - used) / pxPerMm) * 10) / 10,
       hole_mm: Math.round((hole / pxPerMm) * 10) / 10,
+      col_mm: Math.round((colGap / pxPerMm) * 10) / 10,
       overflow,
+      over_mm: Math.round((Math.max(p.scrollHeight - p.clientHeight, used - footTop, 0) / pxPerMm) * 10) / 10,
     };
   });
 }
@@ -89,6 +117,7 @@ def main() -> int:
     ap.add_argument("--min", type=float, default=92.0, help="minimum fill %% (default 92)")
     ap.add_argument("--max", type=float, default=99.5, help="maximum fill %% (default 99.5)")
     ap.add_argument("--hole", type=float, default=12.0, help="max empty vertical band in mm (default 12)")
+    ap.add_argument("--col", type=float, default=15.0, help="max column imbalance in mm (default 15)")
     ap.add_argument("--json", action="store_true", help="print JSON only")
     a = ap.parse_args()
 
@@ -114,13 +143,16 @@ def main() -> int:
     ok = True
     for r in rows:
         if r["overflow"]:
-            r["status"] = "OVERFLOW - cut content"
+            r["status"] = f"OVERFLOW - cut ~{r['over_mm']} mm of content"
             ok = False
         elif r["fill"] < a.min:
             r["status"] = f"UNDER - add ~{r['gap_mm']} mm of content"
             ok = False
         elif r["hole_mm"] > a.hole:
             r["status"] = f"HOLE - {r['hole_mm']} mm empty band mid-page; fill it with content"
+            ok = False
+        elif r["col_mm"] > a.col:
+            r["status"] = f"UNEVEN - one column ends {r['col_mm']} mm early; move or add a block"
             ok = False
         elif r["fill"] > a.max:
             r["status"] = "TIGHT - ok but no room"
@@ -130,9 +162,9 @@ def main() -> int:
     if a.json:
         print(json.dumps(rows, ensure_ascii=False, indent=2))
     else:
-        print(f"{'pg':>3} {'fill%':>6} {'gap_mm':>7} {'hole_mm':>8}  status / title")
+        print(f"{'pg':>3} {'fill%':>6} {'gap_mm':>7} {'hole_mm':>8} {'col_mm':>7}  status / title")
         for r in rows:
-            print(f"{r['page']:>3} {r['fill']:>6} {r['gap_mm']:>7} {r['hole_mm']:>8}  {r['status']}  | {r['title']}")
+            print(f"{r['page']:>3} {r['fill']:>6} {r['gap_mm']:>7} {r['hole_mm']:>8} {r['col_mm']:>7}  {r['status']}  | {r['title']}")
         if a.pdf:
             print(f"PDF written: {a.pdf}")
         print("ALL PAGES FULL" if ok else "FIX PAGES ABOVE, then re-run")

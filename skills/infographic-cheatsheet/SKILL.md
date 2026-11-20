@@ -27,13 +27,13 @@ Output: one self-contained `.html` file plus a `.pdf` export.
    ```bash
    python3 <skill-dir>/scripts/check_fill.py cheatsheet.html
    ```
-   It prints fill %, bottom gap, and the largest empty band (`hole_mm`) per page. Target: **92–99.5 % fill, no HOLE, no OVERFLOW** on every page. Do not fake fill by stretching boxes or pushing the last box to the footer — the hole check catches that.
-6. **Fix and repeat.** For each `UNDER` page, add real content sized to the gap (table in `references/components.md` → "Fill tactics — page is UNDER"). For each `OVERFLOW` page, trim or move content (same file → "page OVERFLOWS"). Re-run step 5. Repeat until the script prints `ALL PAGES FULL`. Usually 2–4 rounds.
+   It prints per page: fill %, bottom gap, largest empty band (`hole_mm`), column imbalance inside 2-column grids (`col_mm`), and overflow size. Target: **92–99.5 % fill, no HOLE, no UNEVEN, no OVERFLOW** on every page. Do not fake fill by stretching boxes or pushing the last box to the footer — the hole check catches that.
+6. **Fix and repeat.** For each `UNDER` page, add real content sized to the gap (table in `references/components.md` → "Fill tactics — page is UNDER"). For `UNEVEN`, move a block from the tall column into the short one, or add a block to the short column — this costs no page height. For each `OVERFLOW` page, trim or move content (same file → "page OVERFLOWS"). Make edits with a re-runnable script applied to a backup of the original, so a bad cut can be undone by rebuilding. Re-run step 5. Repeat until the script prints `ALL PAGES FULL`. Usually 2–4 rounds.
 7. **Export and check visually.**
    ```bash
    python3 <skill-dir>/scripts/check_fill.py cheatsheet.html --pdf cheatsheet.pdf
    ```
-   Open 2–3 pages of the PDF as images and check: nothing clipped, text ≥ 8px, SVG labels readable, colours print, and the two columns end at about the same height (the script cannot see a half-empty column when the other column is full — move a block across to balance).
+   Open 2–3 pages of the PDF as images and check: nothing clipped, text ≥ 8px, SVG labels readable, colours print.
 8. **Report** the file paths, page count, and the fill % table. Say which facts you flagged as doubtful.
 
 ## Content rules

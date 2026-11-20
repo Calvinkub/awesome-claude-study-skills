@@ -46,6 +46,14 @@ Only add content that comes from the source material or is a correct worked exam
 
 As a last resort for gaps < 6 mm, add class `stretch` to the last grid so it grows to the footer, or raise `--fs` by 0.2px for that page via `style="--fs:10.4px"` on the `<section>`.
 
+## Fill tactics — page UNEVEN
+
+A 2-column grid where one column ends early leaves a half-empty band the page-level fill cannot see. Fix before adding new content:
+
+1. Move a box or table from the tall column to the end of the short column.
+2. Or add a block sized to `col_mm` to the short column (an analogy box, a trap box, a practice table).
+3. When appending a new grid under an existing one, first balance the existing grid — otherwise the hole stays above the new content.
+
 ## Fill tactics — page OVERFLOWS
 
 Fix in this order:
